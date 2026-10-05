@@ -1,0 +1,244 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Driver {
+  id           Int      @id @default(autoincrement())
+  slug         String   @unique
+  num          String
+  firstName    String
+  lastName     String
+  team         String
+  car          String
+  power        Int
+  nationality  String
+  flag         String
+  birthDate    String
+  born         String
+  catsCsv      String
+  champsCsv    String
+  standing     Int
+  points       Int
+  bestStanding Int
+  wins         Int
+  podiums      Int
+  bio          String
+  bioEn        String?
+  bioEs        String?
+  bioFr        String?
+  instagram    String
+  historyJson  String
+  imageUrl     String?
+  featured     Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model NewsArticle {
+  id          Int      @id @default(autoincrement())
+  title       String
+  titleEn     String?
+  titleEs     String?
+  titleFr     String?
+  excerpt     String
+  excerptEn   String?
+  excerptEs   String?
+  excerptFr   String?
+  body        String   @default("")
+  bodyEn      String?
+  bodyEs      String?
+  bodyFr      String?
+  badge       String
+  badgePink   Boolean  @default(false)
+  icon        String   @default("target")
+  grad        Int      @default(1)
+  catsCsv     String
+  dateLabel   String
+  imageUrl    String?
+  publishedAt DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Product {
+  id            Int      @id @default(autoincrement())
+  name          String
+  nameEn        String?
+  nameEs        String?
+  nameFr        String?
+  description   String   @default("")
+  descriptionEn String?
+  descriptionEs String?
+  descriptionFr String?
+  price         Float
+  oldPrice      Float?
+  catsCsv       String
+  sizesCsv      String?
+  inStock       Boolean  @default(true)
+  icon          String
+  color         String   @default("lime")
+  grad          Int      @default(1)
+  imageUrl      String?
+  imagesJson    String   @default("[]")
+  variantsJson  String   @default("[]")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Order {
+  id        Int         @id @default(autoincrement())
+  name      String
+  email     String
+  phone     String
+  address   String
+  notes     String      @default("")
+  status    String      @default("pendente")
+  total     Float
+  createdAt DateTime    @default(now())
+  items     OrderItem[]
+}
+
+model OrderItem {
+  id          Int     @id @default(autoincrement())
+  orderId     Int
+  order       Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productName String
+  size        String?
+  price       Float
+  qty         Int
+}
+
+model Banner {
+  id        Int      @id @default(autoincrement())
+  slot      String
+  title     String
+  imageUrl  String
+  linkUrl   String?
+  position  String   @default("center")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Championship {
+  id        Int      @id @default(autoincrement())
+  code      String   @unique
+  name      String
+  nameEn    String?
+  nameEs    String?
+  nameFr    String?
+  desc      String
+  descEn    String?
+  descEs    String?
+  descFr    String?
+  rounds    Int
+  scope     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model StandingEntry {
+  id        Int    @id @default(autoincrement())
+  champCode String
+  pos       Int
+  name      String
+  team      String
+  car       String
+  points    Int
+}
+
+model ResultRound {
+  id          Int      @id @default(autoincrement())
+  champCode   String
+  eyebrow     String
+  eyebrowPink Boolean  @default(false)
+  rounds      Int      @default(1)
+  col3Label   String   @default("País")
+  rowsJson    String   @default("[]")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model CalendarEvent {
+  id        Int       @id @default(autoincrement())
+  month     String
+  day       String
+  fullDate  DateTime
+  endDate   DateTime?
+  title     String
+  titleEn   String?
+  titleEs   String?
+  titleFr   String?
+  desc      String
+  descEn    String?
+  descEs    String?
+  descFr    String?
+  status    String
+  createdAt DateTime  @default(now())
+}
+
+model LeaderboardEntry {
+  id        Int      @id @default(autoincrement())
+  pos       Int
+  name      String
+  platform  String
+  score     String
+  createdAt DateTime @default(now())
+}
+
+model VirtualSession {
+  id         Int      @id @default(autoincrement())
+  title      String
+  titleEn    String?
+  titleEs    String?
+  titleFr    String?
+  details    String
+  detailsEn  String?
+  detailsEs  String?
+  detailsFr  String?
+  discordUrl String?
+  updatedAt  DateTime @updatedAt
+}
+
+model VirtualCalendarEvent {
+  id        Int      @id @default(autoincrement())
+  date      DateTime
+  label     String
+  labelEn   String?
+  labelEs   String?
+  labelFr   String?
+  location  String
+  style     String   @default("fill")
+  createdAt DateTime @default(now())
+}
+
+model GridWorksInquiry {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String
+  team      String   @default("")
+  service   String   @default("")
+  message   String   @default("")
+  status    String   @default("novo")
+  createdAt DateTime @default(now())
+}
+
+model Partner {
+  id        Int      @id @default(autoincrement())
+  name      String
+  logoUrl   String
+  link      String
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model AdminUser {
+  id           Int    @id @default(autoincrement())
+  email        String @unique
+  passwordHash String
+}
